@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chat app node.js</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+
+    <style>
+         * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Verdana;
+  }
+  ul {
+    list-style-type: none;
+    padding: 20px;
+    background: rgb(86, 229, 240);
+    color: rgb(255, 255, 255);
+  }
+ 
+  #controls {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    padding: 20px;
+    display: block;
+    width: 100%;
+  }
+  #controls #msj {
+    float: left;
+    width: 80%;
+    display: block;
+    padding: 20px;
+  }
+  #controls #btn {
+    float: right;
+    padding: 20px;
+    background: rgb(42, 220, 226);
+    color: rgb(255, 255, 255);
+    border:none ;
+  }
+    </style>
+</head>
+<body>
+    <script>
+    var socket = io();
+
+    $(function() {
+        $('form').submit(function() {
+
+            var mensaje = $('#msj').val();
+
+            if (mensaje === '') return false;
+            socket.emit('message', mensaje);
+
+            $('#msj').val('').focus();
+
+        return false;
+    });
+   });
+
+   socket.on('message', function(msj, id) {
+      $('#message').append($('<li>').text(id + " : " + msj));
+    });
+    </script>
+<ul id="message">
+
+</ul>
+<div id="controls">
+  <form action="">
+  <input type="text" id="msj" placeholder="メッセージを送信しよう！">
+  <input type="submit" id="btn" value="送信">
+  </form>
+</div>
+</body>
+</html>
